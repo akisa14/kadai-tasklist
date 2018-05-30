@@ -21,7 +21,7 @@ class TasklistsController extends Controller
         $tasklists = Tasklist::all();
 
         return view('tasklists.index', [
-            'tasklists' => $messages,
+            'tasklists' => $tasklists,
         ]);
     }
 
@@ -31,8 +31,12 @@ class TasklistsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        //
+     {
+        $tasklist = new Tasklist;
+
+        return view('tasklists.create', [
+            'tasklist' => $tasklist,
+        ]);
     }
 
     /**
@@ -61,7 +65,7 @@ class TasklistsController extends Controller
         $tasklist = Tasklist::find($id);
 
         return view('tasklists.show', [
-            'tasklist' => $message,
+            'tasklist' => $tasklist,
         ]);
     }
 
