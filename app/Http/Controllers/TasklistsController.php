@@ -53,7 +53,7 @@ class TasklistsController extends Controller
         ]);
         
         $tasklist = new Tasklist;
-        $message->status = $request->status;
+        $tasklist->status = $request->status;
         $tasklist->content = $request->content;
         $tasklist->save();
 
@@ -105,7 +105,7 @@ class TasklistsController extends Controller
         ]);
         
         $tasklist = Tasklist::find($id);
-        $message->status = $request->status;
+        $tasklist->status = $request->status;
         $tasklist->content = $request->content;
         $tasklist->save();
 
