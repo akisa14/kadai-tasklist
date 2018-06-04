@@ -6,7 +6,7 @@
 
 
     <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-12">
     {!! Form::model($tasklist, ['route' => ['tasklists.update', $tasklist->id], 'method' => 'put']) !!}
         
         <div class="form-group">
