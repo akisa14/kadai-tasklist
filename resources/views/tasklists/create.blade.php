@@ -22,5 +22,7 @@
         {!! Form::submit('投稿', ['class' => 'btn btn-primary']) !!}
 
     {!! Form::close() !!}
+        </div>
+    </div>
 
 @endsection
