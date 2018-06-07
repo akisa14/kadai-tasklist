@@ -28,3 +28,4 @@
      {!! link_to_route('tasklists.create', '新規タスクの投稿', null, ['class' => 'btn btn-primary']) !!}
 
 @endsection
+
