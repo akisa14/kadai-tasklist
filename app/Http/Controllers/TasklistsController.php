@@ -18,11 +18,11 @@ class TasklistsController extends Controller
      */
     public function index()
      {
-        $tasklists = Tasklist::all();
-
+        $user= \Auth::user();
+        $tasklists= $user->tasklists()->get();
         return view('tasklists.index', [
-            'tasklists' => $tasklists,
-        ]);
+            'tasklists'=>$tasklists,
+            ]);
     }
 
     /**
@@ -48,16 +48,15 @@ class TasklistsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'status' => 'required|max:10',
-            'content' => 'required|max:10',
+            'status' => 'required|max:191',
+            'content' => 'required|max:191',
         ]);
         
-        $tasklist = new Tasklist;
-        $tasklist->status = $request->status;
-        $tasklist->content = $request->content;
-        $tasklist->save();
+        $request->user()->tasklists()->create([
+            'content' => $request->content,
+        ]);
 
-        return redirect('/');
+        return redirect()->back();
     }
 
     /**
@@ -120,9 +119,13 @@ class TasklistsController extends Controller
      */
     public function destroy($id)
     {
-        $tasklist = Tasklist::find($id);
-        $tasklist->delete();
+        $tasklist = \App\Tasklist::find($id);
 
-        return redirect('/');
+        if (\Auth::user()->id === $tasklist->user_id) {
+            $tasklist->delete();
+        }
+
+        return redirect()->back();
+        
     }
 }

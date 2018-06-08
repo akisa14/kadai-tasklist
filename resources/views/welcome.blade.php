@@ -2,10 +2,17 @@
 
 @section('content')
      @if (Auth::check())
-        <?php $tasklist = Auth::tasklist(); ?>
-        {{ $tasklist->name }}
+        <div class="row">
+            <aside class="col-md-4">
+            </aside>
+            <div class="col-xs-8">
+                @if (count($tasklists) > 0)
+                    @include('tasklists.tasklists', ['tasklists' => $tasklists])
+                @endif
+            </div>
+        </div>
+        
     @else
-
     <div class="center jumbotron">
         <div class="text-center">
             <h1>Welcome to the Tasklists</h1>
