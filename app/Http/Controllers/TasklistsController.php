@@ -84,6 +84,8 @@ class TasklistsController extends Controller
      */
     public function show($id)
     {
+         $tasklist = Tasklist::find($id);
+         
          if (!empty($tasklist->user_id)) {
             if (\Auth::user()->id === $tasklist->user_id) {
            return view('tasklists.show', [
