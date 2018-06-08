@@ -42,11 +42,16 @@ class TasklistsController extends Controller
      */
     public function create()
     {
+        if (\Auth::check()) {
         $tasklist = new Tasklist;
 
         return view('tasklists.create', [
             'tasklist' => $tasklist,
         ]);
+        }
+        else {
+            return redirect('/');
+        }
     }
 
     /**
@@ -99,7 +104,7 @@ class TasklistsController extends Controller
         
         
         if (!empty($tasklist->user_id)) {
-             if (\Auth::user()->id === $tasklist->user_id) {
+            if (\Auth::user()->id === $tasklist->user_id) {
            return view('tasklists.edit', [
             'tasklist' => $tasklist,
             ]);
