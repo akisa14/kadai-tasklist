@@ -18,12 +18,22 @@ class TasklistsController extends Controller
      */
     public function index()
      {
-        $user= \Auth::user();
-        $tasklists= $user->tasklists()->get();
-        return view('tasklists.index', [
-            'tasklists'=>$tasklists,
-            ]);
+        $data = [];
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $tasklists = $user->tasklists()->orderBy('created_at', 'asc')->paginate(10);
+
+            $data = [
+                'user' => $user,
+                'tasklists' => $tasklists,
+            ];
+            $data += $this->counts($user);
+            return view('tasklists.index', $data);
+        }else {
+            return view('welcome');
+        };
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -31,7 +41,7 @@ class TasklistsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-     {
+    {
         $tasklist = new Tasklist;
 
         return view('tasklists.create', [
@@ -48,15 +58,17 @@ class TasklistsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'status' => 'required|max:191',
-            'content' => 'required|max:191',
+            'status' => 'required|max:10',
+            'content' => 'required|max:10',
         ]);
         
-        $request->user()->tasklists()->create([
-            'content' => $request->content,
-        ]);
+        $tasklist = new Tasklist;
+        $tasklist->status = $request->status;
+        $tasklist->content = $request->content;
+        $tasklist->user_id = \Auth::user()->id;
+        $tasklist->save();
 
-        return redirect()->back();
+        return redirect('/');
     }
 
     /**
@@ -82,11 +94,26 @@ class TasklistsController extends Controller
      */
     public function edit($id)
     {
+        
         $tasklist = Tasklist::find($id);
-
-        return view('tasklists.edit', [
+        
+        
+        if (!empty($tasklist->user_id)) {
+             if (\Auth::user()->id === $tasklist->user_id) {
+           return view('tasklists.edit', [
             'tasklist' => $tasklist,
-        ]);
+            ]);
+             }
+            else {
+                return redirect('/');
+            }
+        }
+        
+        else {
+            return redirect('/');
+        }
+        
+    
     }
 
     /**
@@ -125,7 +152,7 @@ class TasklistsController extends Controller
             $tasklist->delete();
         }
 
-        return redirect()->back();
+        return redirect('/');
         
     }
 }
